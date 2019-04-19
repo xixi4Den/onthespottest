@@ -10,7 +10,7 @@ globals:
 parserOptions:
   ecmaVersion: 2018
 rules:
-  semi: 0
+  semi: ["error", "never"]
   indent: ["error", 4]
   comma-dangle: 0
   no-restricted-syntax: 0
