@@ -1,0 +1,14 @@
+{
+  "name": "js-test-task",
+  "version": "1.0.0",
+  "description": "A test task for On The Spot Development",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "author": "xixi4.den@gmail.com",
+  "license": "UNLICENSED",
+  "devDependencies": {
+    "jest": "^24.7.1"
+  }
+}
