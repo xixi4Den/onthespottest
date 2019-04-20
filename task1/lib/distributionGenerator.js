@@ -1,5 +1,7 @@
 const flatten = require('lodash/flatten')
 
+const NotEnoughCoinsError = require('../../errors/notEnoughCoinsError')
+
 function getOptimalDistribution(amount, denominations) {
     let remainingCoins = amount
 
@@ -16,7 +18,7 @@ function getOptimalDistribution(amount, denominations) {
     }
 
     if (remainingCoins > 0) {
-        throw Error('insufficient coinage')
+        throw new NotEnoughCoinsError('insufficient coinage')
     }
 
     return distribution

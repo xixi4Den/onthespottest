@@ -1,4 +1,5 @@
 const sut = require('../../task1/changeSupplier')
+const ArgumentError = require('../../errors/argumentError')
 
 function checkReturnedCoins(actualCoins, expectedDenominations) {
     const expectedCoins = expectedDenominations.map(denomination => ({ denomination }))
@@ -39,13 +40,13 @@ describe('positive flow', () => {
 
 describe('negative flow', () => {
     test('should throw error if negative number passed', () => {
-        expect(() => sut.getOptimalChangeFor(-1)).toThrow(Error)
+        expect(() => sut.getOptimalChangeFor(-1)).toThrow(ArgumentError)
     })
 
     test('should throw error if argument is >= max limit (default) for input value', () => {
-        expect(() => sut.getOptimalChangeFor(499)).not.toThrow(Error)
-        expect(() => sut.getOptimalChangeFor(500)).toThrow(Error)
-        expect(() => sut.getOptimalChangeFor(501)).toThrow(Error)
+        expect(() => sut.getOptimalChangeFor(499)).not.toThrow(ArgumentError)
+        expect(() => sut.getOptimalChangeFor(500)).toThrow(ArgumentError)
+        expect(() => sut.getOptimalChangeFor(501)).toThrow(ArgumentError)
     })
 
     describe('env variables', () => {

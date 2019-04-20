@@ -2,6 +2,9 @@ const Inventory = require('../../task2/inventory')
 const ChangeSupplier = require('../../task2/changeSupplier')
 const testDenominations = require('./testData/denominations')
 const testDenominationsFull = require('./testData/denominations-full')
+const ArgumentError = require('../../errors/argumentError')
+const NotEnoughCoinsError = require('../../errors/notEnoughCoinsError')
+
 
 function checkReturnedCoins(actualCoins, expectedDenominations) {
     const expectedCoins = expectedDenominations.map(denomination => ({ denomination }))
@@ -83,7 +86,7 @@ describe('getChangeFor()', () => {
 
     describe('negative flow', () => {
         test('should throw error if negative number passed', () => {
-            expect(() => sut.getChangeFor(-1)).toThrow(Error)
+            expect(() => sut.getChangeFor(-1)).toThrow(ArgumentError)
         })
 
         describe('check max limit for imput value', () => {
@@ -93,9 +96,9 @@ describe('getChangeFor()', () => {
             })
 
             test('should throw error if argument is >= max limit (default) for input value', () => {
-                expect(() => sut.getChangeFor(499)).not.toThrow(Error)
-                expect(() => sut.getChangeFor(500)).toThrow(Error)
-                expect(() => sut.getChangeFor(501)).toThrow(Error)
+                expect(() => sut.getChangeFor(499)).not.toThrow(ArgumentError)
+                expect(() => sut.getChangeFor(500)).toThrow(ArgumentError)
+                expect(() => sut.getChangeFor(501)).toThrow(ArgumentError)
             })
 
             describe('env variables', () => {
@@ -143,20 +146,20 @@ describe('getChangeFor()', () => {
             }
 
             test('shoudl throw error if total amount of coins in inventory is less than requested amount', () => {
-                expect(() => sut.getChangeFor(3.29)).toThrow(Error)
+                expect(() => sut.getChangeFor(3.29)).toThrow(NotEnoughCoinsError)
                 checkNumberOfCoinsInInventoryDidNotChanged()
             })
 
             test('should not throw error if total amount of coins in inventory is equal to requested amount', () => {
-                expect(() => sut.getChangeFor(3.28)).not.toThrow(Error)
+                expect(() => sut.getChangeFor(3.28)).not.toThrow(NotEnoughCoinsError)
             })
 
             test('should throw error if inventory does not contain denominations to provide full amount', () => {
                 // inventory cannot provide 9 cents
                 // because it contains one 2cents coin and one 1cent coin
-                expect(() => sut.getChangeFor(1.79)).toThrow(Error)
+                expect(() => sut.getChangeFor(1.79)).toThrow(NotEnoughCoinsError)
                 checkNumberOfCoinsInInventoryDidNotChanged()
-                expect(() => sut.getChangeFor(1.78)).not.toThrow(Error)
+                expect(() => sut.getChangeFor(1.78)).not.toThrow(NotEnoughCoinsError)
             })
         })
     })

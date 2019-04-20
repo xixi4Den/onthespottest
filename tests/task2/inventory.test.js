@@ -1,4 +1,7 @@
 const Inventory = require('../../task2/inventory')
+const ArgumentError = require('../../errors/argumentError')
+const UnknownDenominationError = require('../../errors/unknownDenominationError')
+const NotEnoughCoinsError = require('../../errors/notEnoughCoinsError')
 
 describe('getAvailableDenominations()', () => {
     test('return empty array if there is no available denominations', () => {
@@ -70,19 +73,19 @@ describe('getAvailableTotal()', () => {
 describe('provide()', () => {
     test('should throw error if requested denomination does not exist in inventory', () => {
         const sut = new Inventory([{ value: 100, count: 5 }])
-        expect(() => sut.provide(50, 2)).toThrow(Error)
+        expect(() => sut.provide(50, 2)).toThrow(UnknownDenominationError)
     })
 
     test('should throw error if requested reduce count is negative', () => {
         const sut = new Inventory([{ value: 100, count: 5 }])
-        expect(() => sut.provide(100, -1)).toThrow(Error)
-        expect(() => sut.provide(100, -99999)).toThrow(Error)
+        expect(() => sut.provide(100, -1)).toThrow(ArgumentError)
+        expect(() => sut.provide(100, -99999)).toThrow(ArgumentError)
     })
 
     test('should throw error if requested reduce count is bigger than count in inventory', () => {
         const sut = new Inventory([{ value: 100, count: 5 }])
-        expect(() => sut.provide(100, 6)).toThrow(Error)
-        expect(() => sut.provide(100, 99999)).toThrow(Error)
+        expect(() => sut.provide(100, 6)).toThrow(NotEnoughCoinsError)
+        expect(() => sut.provide(100, 99999)).toThrow(NotEnoughCoinsError)
     })
 
     test('should return correct coins and correctly reduce count of denomination', () => {

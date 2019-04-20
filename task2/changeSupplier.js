@@ -1,6 +1,7 @@
 const { validate } = require('../task1/lib/inputValidator')
 const { convertToCoins } = require('../task1/lib/converter')
 const { getOptimalDistribution, iterate } = require('../task1/lib/distributionGenerator')
+const NotEnoughCoinsError = require('../errors/notEnoughCoinsError')
 
 class ChangeSupplier {
     constructor(inventory) {
@@ -10,7 +11,7 @@ class ChangeSupplier {
     validateInventoryTotal(requestedAmount) {
         const availableTotal = this.inventory.getAvailableTotal()
         if (availableTotal < requestedAmount) {
-            throw new Error('not enough coins to provide change')
+            throw new NotEnoughCoinsError('not enough coins to provide change')
         }
     }
 
