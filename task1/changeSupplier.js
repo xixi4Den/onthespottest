@@ -1,6 +1,7 @@
 const times = require('lodash/times')
 
 const MAX_ALLOWED_EURO = process.env.MAX_ALLOWED_EURO || 500 // 500 is max Euro banknote
+const EURO_TO_COINS_COEFFICIENT = 100
 
 const coinDenominations = [100, 50, 20, 10, 5, 2, 1]
 
@@ -14,16 +15,19 @@ function validate(euro) {
     }
 }
 
+function convertToCoins(euro) {
+    return Math.floor(euro * EURO_TO_COINS_COEFFICIENT)
+}
+
 function getOptimalChangeFor(euro) {
     validate(euro)
 
-    const res = []
-
-    let remainingCoins = Math.floor(euro * 100)
+    let remainingCoins = convertToCoins(euro)
     if (remainingCoins === 0) {
         return []
     }
 
+    const res = []
     for (const denomination of coinDenominations) {
         if (remainingCoins >= denomination) {
             const quotient = Math.floor(remainingCoins / denomination)
