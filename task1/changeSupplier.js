@@ -4,7 +4,7 @@ const MAX_ALLOWED_EURO = process.env.MAX_ALLOWED_EURO || 500 // 500 is max Euro 
 
 const coinDenominations = [100, 50, 20, 10, 5, 2, 1]
 
-const validate = (euro) => {
+function validate(euro) {
     if (euro < 0) {
         throw new Error('input argument cannot be a negative number')
     }
@@ -19,11 +19,17 @@ function getOptimalChangeFor(euro) {
 
     const res = []
 
-    let remainingCoins = euro * 100
+    let remainingCoins = Math.floor(euro * 100)
+    if (remainingCoins === 0) {
+        return []
+    }
+
     for (const denomination of coinDenominations) {
-        const quotient = Math.floor(remainingCoins / denomination)
-        times(quotient, () => res.push({ denomination }))
-        remainingCoins -= denomination * quotient
+        if (remainingCoins >= denomination) {
+            const quotient = Math.floor(remainingCoins / denomination)
+            times(quotient, () => res.push({ denomination }))
+            remainingCoins -= denomination * quotient
+        }
     }
 
     return res
