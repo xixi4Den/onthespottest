@@ -67,4 +67,14 @@ describe('negative flow', () => {
             expect(() => newSut.getOptimalChangeFor(1001)).toThrow(Error)
         })
     })
+
+    describe('handle input with float precision grater than 2', () => {
+        test('should take into account first two decimal places', () => {
+            checkReturnedCoins(sut.getOptimalChangeFor(0.331008654), [20, 10, 2, 1])
+        })
+
+        test('should not use banking rounding', () => {
+            checkReturnedCoins(sut.getOptimalChangeFor(0.015), [1])
+        })
+    })
 })
