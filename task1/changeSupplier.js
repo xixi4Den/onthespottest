@@ -3,7 +3,15 @@ const times = require('lodash/times')
 const MAX_ALLOWED_EURO = process.env.MAX_ALLOWED_EURO || 500 // 500 is max Euro banknote
 const EURO_TO_COINS_COEFFICIENT = 100
 
-const coinDenominations = [100, 50, 20, 10, 5, 2, 1]
+const coinDenominations = [
+    { value: 100 },
+    { value: 50 },
+    { value: 20 },
+    { value: 10 },
+    { value: 5 },
+    { value: 2 },
+    { value: 1 }
+]
 
 function validate(euro) {
     if (euro < 0) {
@@ -16,29 +24,55 @@ function validate(euro) {
 }
 
 function convertToCoins(euro) {
-    return Math.floor(euro * EURO_TO_COINS_COEFFICIENT)
+    return (euro.toFixed(2) * EURO_TO_COINS_COEFFICIENT).toFixed()
+}
+
+function getOptimalDistribution(amount, denominations) {
+    let remainingCoins = amount
+
+    const distribution = new Map()
+    for (const denomination of denominations) {
+        if (remainingCoins >= denomination.value) {
+            const optimalQuotient = Math.floor(remainingCoins / denomination.value)
+            const quotient = Number.isInteger(denomination.count)
+                ? Math.min(optimalQuotient, denomination.count)
+                : optimalQuotient
+            distribution.set(denomination.value, quotient)
+            remainingCoins -= denomination.value * quotient
+        }
+    }
+
+    if (remainingCoins > 0) {
+        throw Error('insufficient coinage')
+    }
+
+    return distribution
+}
+
+function getCoins(coinsDistribution) {
+    const res = []
+    coinsDistribution.forEach((count, denomination) => {
+        times(count, () => res.push({ denomination }))
+    })
+
+    return res
 }
 
 function getOptimalChangeFor(euro) {
     validate(euro)
 
-    let remainingCoins = convertToCoins(euro)
-    if (remainingCoins === 0) {
+    const coinsAmount = convertToCoins(euro)
+    if (coinsAmount === 0) {
         return []
     }
 
-    const res = []
-    for (const denomination of coinDenominations) {
-        if (remainingCoins >= denomination) {
-            const quotient = Math.floor(remainingCoins / denomination)
-            times(quotient, () => res.push({ denomination }))
-            remainingCoins -= denomination * quotient
-        }
-    }
-
-    return res
+    const distribution = getOptimalDistribution(coinsAmount, coinDenominations)
+    return getCoins(distribution)
 }
 
 module.exports = {
+    validate,
+    convertToCoins,
+    getOptimalDistribution,
     getOptimalChangeFor
 }

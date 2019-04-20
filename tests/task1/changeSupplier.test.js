@@ -31,6 +31,10 @@ describe('positive flow', () => {
     test('should return one coin of each denomination for 1.88 Euro', () => {
         checkReturnedCoins(sut.getOptimalChangeFor(1.88), [100, 50, 20, 10, 5, 2, 1])
     })
+
+    test('should not ignore 1 cent coin for 2.01 Euro', () => {
+        checkReturnedCoins(sut.getOptimalChangeFor(2.01), [100, 100, 1])
+    })
 })
 
 describe('negative flow', () => {
@@ -75,7 +79,6 @@ describe('negative flow', () => {
         })
 
         test('should handle very small decimals as zero', () => {
-            checkReturnedCoins(sut.getOptimalChangeFor(0.009999999999), [])
             checkReturnedCoins(sut.getOptimalChangeFor(0.000000000001), [])
         })
     })
