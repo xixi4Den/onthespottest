@@ -1,10 +1,6 @@
-const flatten = require('lodash/flatten')
-
-const {
-    validate,
-    convertToCoins,
-    getOptimalDistribution,
-} = require('../task1/changeSupplier')
+const { validate } = require('../task1/lib/inputValidator')
+const { convertToCoins } = require('../task1/lib/converter')
+const { getOptimalDistribution, iterate } = require('../task1/lib/distributionGenerator')
 
 class ChangeSupplier {
     constructor(inventory) {
@@ -30,8 +26,8 @@ class ChangeSupplier {
         const availableDenominations = this.inventory.getAvailableDenominations()
         const distribution = getOptimalDistribution(coinsAmount, availableDenominations)
 
-        return flatten(Array.from(distribution, ([denomination, count]) =>
-            this.inventory.provide(denomination, count)))
+        return iterate(distribution, (denomination, count) =>
+            this.inventory.provide(denomination, count))
     }
 }
 

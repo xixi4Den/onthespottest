@@ -1,4 +1,5 @@
 const cloneDeep = require('lodash/cloneDeep')
+const range = require('lodash/range')
 
 class Inventory {
     constructor(denominations) {
@@ -29,8 +30,7 @@ class Inventory {
             throw new Error('wrong count')
         }
         denominations.count -= count
-        const res = Array.from(Array(count).keys()).map(() => ({ denomination }))
-        return res
+        return range(count).map(() => ({ denomination }))
     }
 }
 
