@@ -4,6 +4,7 @@
   "description": "A test task for On The Spot Development",
   "main": "index.js",
   "scripts": {
+    "start": "node index.js",
     "test": "./node_modules/.bin/eslint . && jest"
   },
   "author": "xixi4.den@gmail.com",
@@ -15,6 +16,11 @@
     "jest": "^24.7.1"
   },
   "dependencies": {
-    "lodash": "^4.17.11"
+    "chalk": "^2.4.2",
+    "clear": "^0.1.0",
+    "figlet": "^1.2.1",
+    "inquirer": "^6.3.1",
+    "lodash": "^4.17.11",
+    "require-dir": "^1.2.0"
   }
 }
