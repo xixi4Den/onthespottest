@@ -14,8 +14,13 @@ function shouldContinue() {
     return inquirer.prompt(questions.continue)
 }
 
+function requestInventoryConfig(defaultConfig) {
+    return inquirer.prompt(questions.inventoryConfig(defaultConfig))
+}
+
 module.exports = {
     chooseTask,
     requestInput,
-    shouldContinue
+    shouldContinue,
+    requestInventoryConfig
 }

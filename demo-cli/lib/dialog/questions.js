@@ -1,3 +1,18 @@
+function inventoryConfig(defaultConfig) {
+    return defaultConfig.map(x => ({
+        type: 'number',
+        name: x.value,
+        message: `Specify initial number of coins for denomination=${x.value}`,
+        default: x.count,
+        validate: (answer) => {
+            if (Number.isNaN(answer)) {
+                return 'You must specify a number'
+            }
+            return true
+        }
+    }))
+}
+
 module.exports = {
     task: [
         {
@@ -40,4 +55,5 @@ module.exports = {
             message: 'Would you like to continue?'
         }
     ],
+    inventoryConfig
 }

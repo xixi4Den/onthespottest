@@ -1,5 +1,6 @@
 const cloneDeep = require('lodash/cloneDeep')
 const range = require('lodash/range')
+const orderBy = require('lodash/orderBy')
 
 const ArgumentError = require('../errors/argumentError')
 const UnknownDenominationError = require('../errors/unknownDenominationError')
@@ -7,7 +8,7 @@ const NotEnoughCoinsError = require('../errors/notEnoughCoinsError')
 
 class Inventory {
     constructor(denominations) {
-        this.denominations = cloneDeep(denominations)
+        this.denominations = orderBy(cloneDeep(denominations), ['value'], ['desc'])
     }
 
     get(denominationValue) {

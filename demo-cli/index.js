@@ -14,7 +14,7 @@ async function run() {
     if (!command) {
         printError('task does not exist')
     }
-    command.init()
+    await command.init()
     await command.run()
 }
 

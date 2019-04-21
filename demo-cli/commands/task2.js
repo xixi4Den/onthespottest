@@ -1,3 +1,4 @@
+const Environment = require('../../environment')
 const Inventory = require('../../task2/inventory')
 const ChangeSupplier = require('../../task2/changeSupplier')
 const dialog = require('../lib/dialog')
@@ -6,16 +7,15 @@ const { printCoins, printError, printInventory } = require('../lib/print')
 let inventory
 let changeSupplier
 
-const init = () => {
-    inventory = new Inventory([
-        { value: 100, count: 11 },
-        { value: 50, count: 24 },
-        { value: 20, count: 0 },
-        { value: 10, count: 99 },
-        { value: 5, count: 200 },
-        { value: 2, count: 11 },
-        { value: 1, count: 23 }
-    ])
+const init = async () => {
+    const environment = new Environment(process.env)
+    const defaultInventoryConfig = environment.inventoryConfig
+
+    const configAnswer = await dialog.requestInventoryConfig(defaultInventoryConfig)
+    const inventorySeed = Object.keys(configAnswer).map(value =>
+        ({ value: Number.parseInt(value, 10), count: configAnswer[value] }))
+
+    inventory = new Inventory(inventorySeed)
     changeSupplier = new ChangeSupplier(inventory)
 }
 
