@@ -15,34 +15,31 @@ class Environment {
         this.env = env
     }
 
-    getInventoryRowConfig(value) {
-        const defaultConfig = inventoryConfigDefault.find(x => x.value === value)
-        if (!defaultConfig) {
-            throw new InvalidConfigError(`there is no default inventory config for denomination=${value}`)
-        }
-
-        let count
-        const key = `INVENTORY_CONFIG_${value}`
-        const countEnvVarStr = this.env[key]
-        if (countEnvVarStr) {
-            const countEnvVar = Number.parseInt(countEnvVarStr, 10)
-            if (Number.isNaN(countEnvVar)) {
-                throw new InvalidConfigError(`${key} env variable should be a number`)
+    getPositiveNumericValueOrDefault(key, defaultValue) {
+        const envVarStr = this.env[key]
+        if (envVarStr) {
+            const envVar = Number.parseInt(envVarStr, 10)
+            if (Number.isNaN(envVar) || envVar < 0) {
+                throw new InvalidConfigError(`${key} env variable should be a positive number`)
             }
-            count = countEnvVar
-        } else {
-            ({ count } = defaultConfig)
+            return envVar
         }
+        return defaultValue
+    }
 
-        return { value, count }
+    getInventoryRowConfig(defaultConfigRow) {
+        const key = `INVENTORY_CONFIG_${defaultConfigRow.value}`
+        const count = this.getPositiveNumericValueOrDefault(key, defaultConfigRow.count)
+
+        return { value: defaultConfigRow.value, count }
     }
 
     get inventoryConfig() {
-        return inventoryConfigDefault.map(x => this.getInventoryRowConfig(x.value))
+        return inventoryConfigDefault.map(x => this.getInventoryRowConfig(x))
     }
 
     get maxAllowedEuro() {
-        return this.env.MAX_ALLOWED_EURO || 500
+        return this.getPositiveNumericValueOrDefault('MAX_ALLOWED_EURO', 500)
     }
 }
 

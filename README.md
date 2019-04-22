@@ -51,3 +51,9 @@ Run coding style tests and unit tests
 ```
 npm test
 ```
+
+Run unit tests and calculate coverage
+
+```
+npm run test:coverage
+```

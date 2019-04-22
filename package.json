@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "test": "./node_modules/.bin/eslint . && jest"
+    "test": "./node_modules/.bin/eslint . && jest",
+    "test:coverage": "jest --coverage"
   },
   "author": "xixi4.den@gmail.com",
   "license": "UNLICENSED",
