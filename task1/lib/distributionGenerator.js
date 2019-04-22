@@ -2,6 +2,14 @@ const flatten = require('lodash/flatten')
 
 const NotEnoughCoinsError = require('../../errors/notEnoughCoinsError')
 
+/**
+ * Get optimal coin distribution for specified amount based on available coins denomination.
+ * Optimal distribution means the least number of result coins.
+ * @param {Number} amount amount in cents
+ * @param {Array} denominations available coin denominations
+ * @returns {Map}
+ * @throws {NotEnoughCoinsError} if available denominations cannot fully cover requested amount
+ */
 function getOptimalDistribution(amount, denominations) {
     let remainingCoins = amount
 
@@ -24,6 +32,9 @@ function getOptimalDistribution(amount, denominations) {
     return distribution
 }
 
+/**
+ * Iterate distribution and return flat list of results.
+ */
 function iterate(distribution, fn) {
     return flatten(Array.from(distribution, ([denomination, count]) =>
         fn(denomination, count)))

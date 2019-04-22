@@ -14,6 +14,12 @@ const coinDenominations = [
     { value: 1 }
 ]
 
+/**
+ * Return the optimal change for a given number of Euro assuming an unlimited supply of coins.
+ * Return the least number of coins possible.
+ * @param {Number} euro decimal value in Euro rounded to two decimal places
+ * @returns {Array} array of coins
+ */
 function getOptimalChangeFor(euro) {
     validate(euro)
 
